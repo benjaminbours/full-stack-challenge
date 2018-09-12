@@ -1,10 +1,11 @@
 const path = require('path');
 // const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: {
-    'javascripts/client': './src/client/app.jsx',
+    'javascripts/client': ['@babel/polyfill', './src/client/app.jsx'],
     // server: './src/server/app.js',
   },
   output: {
@@ -22,14 +23,36 @@ module.exports = {
           loader: 'babel-loader',
         },
       },
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-          },
-        ],
-      },
+      // {
+      //   test: /\.css$/,
+      //   use: ExtractTextPlugin.extract({
+      //     use: [
+      //       {
+      //         loader: 'css-loader',
+      //         options: {
+      //           importLoaders: 1,
+      //           sourceMap: true,
+      //         },
+      //       },
+      //     ],
+      //   }),
+      // },
+      // {
+      //   test: /\.(sass|scss)$/,
+      //   use: ExtractTextPlugin.extract({
+      //     use: [
+      //       {
+      //         loader: 'css-loader',
+      //         options: {
+      //           importLoaders: 2,
+      //           sourceMap: true,
+      //           // localIndentName: "[name]__[local]__[hash:base64:5]"
+      //         },
+      //       },
+      //       'sass-loader',
+      //     ],
+      //   }),
+      // },
     ],
   },
   stats: {
@@ -43,6 +66,10 @@ module.exports = {
     new HtmlWebPackPlugin({
       template: './src/client/index.html',
       filename: './index.html',
+    }),
+    new ExtractTextPlugin({
+      filename: 'stylesheets/style.css',
+      allChunks: true,
     }),
   ],
 };
