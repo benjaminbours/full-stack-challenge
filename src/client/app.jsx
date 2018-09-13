@@ -1,15 +1,8 @@
-import { fetch } from 'whatwg-fetch';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-// import Report from './views/Report';
 import ReportForm from './views/ReportForm';
 import ReportList from './views/ReportList';
 import Multiviews from './Multiviews';
-
-console.log(fetch);
-// import './main.scss';
-
-// console.log(Report, ReportList);
 
 class App extends Component {
   handleSelectedView = () => {
@@ -24,7 +17,9 @@ class App extends Component {
         views={{
           reportForm: {
             name: 'New Report',
-            view: () => <ReportForm title="New report" />,
+            view: () => (
+              <ReportForm title="New report" />
+            ),
           },
           reportList: {
             name: 'List of reports',
