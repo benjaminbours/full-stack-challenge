@@ -18,8 +18,6 @@ router.get('/report/:lat/:long', (req, res) => {
   MongoClient.connect(rootUrl, (err, db) => {
     const dbo = db.db('cpark');
     dbo.collection('reports').find({}).toArray((error, result) => {
-      console.log(result);
-
       const reportsToSend = result.filter((item) => {
         const report = item;
         const distance = Calcul.distanceBeetweenPoint(currentPosition, report.coordinate);
