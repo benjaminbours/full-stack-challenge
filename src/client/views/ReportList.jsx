@@ -21,7 +21,13 @@ const styles = () => ({
   },
 });
 
+/**
+ * This is Foo.
+ */
 class ReportList extends Component {
+  /**
+ * @param {number} p - this is p.
+ */
   static propTypes = {
     classes: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -51,7 +57,7 @@ class ReportList extends Component {
     stopLoading();
   }
 
-  handleByTime = () => {
+  handleSortByTime = () => {
     const { items } = this.state;
     const newItems = items.sort((a, b) => {
       const aTime = new Date(a.time).getTime();
@@ -63,7 +69,7 @@ class ReportList extends Component {
     });
   }
 
-  handleByDistance = () => {
+  handleSortByDistance = () => {
     const { items } = this.state;
     const newItems = items.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
     this.setState({
@@ -84,7 +90,7 @@ class ReportList extends Component {
             <Button
               color="primary"
               variant="contained"
-              onClick={this.handleByTime}
+              onClick={this.handleSortByTime}
             >
               By time
             </Button>
@@ -93,7 +99,7 @@ class ReportList extends Component {
             <Button
               color="primary"
               variant="contained"
-              onClick={this.handleByDistance}
+              onClick={this.handleSortByDistance}
             >
               By distance
             </Button>
@@ -103,7 +109,7 @@ class ReportList extends Component {
           {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           <List>
             {items.map(item => (
-              <Report key={item.title} {...item} />
+              <Report key={item.id} {...item} />
             ))}
             {!loading && items.length === 0 && (
               <Typography>Sorry, no report around 10km</Typography>

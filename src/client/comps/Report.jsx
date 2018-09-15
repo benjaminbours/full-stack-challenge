@@ -29,7 +29,6 @@ const Report = ({
 };
 
 Report.propTypes = {
-  // id: PropTypes.number.isRequired,
   classes: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   time: PropTypes.string.isRequired,

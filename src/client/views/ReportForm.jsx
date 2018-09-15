@@ -52,6 +52,12 @@ const defaultFields = {
   },
 };
 
+/**
+ * This is MyClass.
+ * @reactProps {!number} prop1 - this is prop1
+ * @reactProps {string} prop2 - this is prop2
+ */
+
 class ReportForm extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
@@ -131,7 +137,7 @@ class ReportForm extends Component {
         <Grid item xs={12}>
           <TextField
             id="title"
-            label="Titre"
+            label="Title"
             value={title.value}
             error={title.error}
             helperText={title.message}
@@ -143,7 +149,7 @@ class ReportForm extends Component {
         <Grid item xs={12}>
           <TextField
             id="time"
-            label="Heure"
+            label="Time"
             type="datetime-local"
             value={time.value}
             error={time.error}
