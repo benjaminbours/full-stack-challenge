@@ -54,10 +54,9 @@ class ReportList extends Component {
   handleByTime = () => {
     const { items } = this.state;
     const newItems = items.sort((a, b) => {
-      const aSplit = a.time.split(':');
-      const bSplit = b.time.split(':');
-      return (parseFloat(aSplit[0] * 10) - parseFloat(bSplit[0] * 10)
-        + (parseFloat(aSplit[1]) - parseFloat(bSplit[1])));
+      const aTime = new Date(a.time).getTime();
+      const bTime = new Date(b.time).getTime();
+      return aTime - bTime;
     });
     this.setState({
       items: newItems,

@@ -144,7 +144,7 @@ class ReportForm extends Component {
           <TextField
             id="time"
             label="Heure"
-            type="time"
+            type="datetime-local"
             value={time.value}
             error={time.error}
             helperText={time.message}

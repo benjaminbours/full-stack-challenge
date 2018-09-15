@@ -17,13 +17,16 @@ const Report = ({
   time,
   distance,
   classes,
-}) => (
-  <ListItem className={classes.root}>
-    <Typography>{`Title: ${title}`}</Typography>
-    <Typography>{`Distance: ${distance} km`}</Typography>
-    <Typography>{`time: ${time}`}</Typography>
-  </ListItem>
-);
+}) => {
+  const timeObj = new Date(time);
+  return (
+    <ListItem className={classes.root}>
+      <Typography>{`Title: ${title}`}</Typography>
+      <Typography>{`Distance: ${distance} km`}</Typography>
+      <Typography>{`Date: ${timeObj.getDay()}/${timeObj.getMonth()}/${timeObj.getFullYear()} ${timeObj.getHours()}h${timeObj.getMinutes()}min`}</Typography>
+    </ListItem>
+  );
+};
 
 Report.propTypes = {
   // id: PropTypes.number.isRequired,

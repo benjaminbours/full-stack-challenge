@@ -26,7 +26,7 @@ class App extends Component {
       <div>
         <Multiviews
           onSelected={this.handleSelectedView}
-          defaultView="reportList"
+          defaultView="reportForm"
           views={{
             reportForm: {
               name: 'New Report',

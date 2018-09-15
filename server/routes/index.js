@@ -38,7 +38,7 @@ router.get('/report/:lat/:long', (req, res) => {
 router.post('/report', (req, res) => {
   const schema = {
     title: Joi.string().min(3).required(),
-    time: Joi.string().min(5).required(),
+    time: Joi.string().required(),
     coordinate: {
       latitude: Joi.number().required(),
       longitude: Joi.number().required(),
@@ -54,6 +54,7 @@ router.post('/report', (req, res) => {
   const report = {
     ...req.body,
   };
+  report.time = new Date(report.time);
   reports.push(report);
   const distance = Calcul.distanceBeetweenPoint(reports[0].coordinate, reports[1].coordinate);
   res.send({ distance });
