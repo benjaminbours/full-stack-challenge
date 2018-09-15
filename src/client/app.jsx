@@ -17,7 +17,7 @@ class App extends Component {
   }
 
   handleSelectedView = () => {
-    console.log('yo here');
+    // console.log('yo here');
   }
 
   render() {

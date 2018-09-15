@@ -1,30 +1,38 @@
 const express = require('express');
 const Joi = require('joi');
-const mongo = require('mongodb');
+// const mongo = require('mongodb');
+const Calcul = require('../helpers/Calcul');
 
 const router = express.Router();
 
 const reports = [
   {
     title: 'fake',
-    time: '2h30',
+    time: '02:30',
     coordinate: {
-      latitude: 30,
-      longitude: 30,
-    },
-  },
-  {
-    title: 'fake2',
-    time: '2h30',
-    coordinate: {
-      latitude: 30,
-      longitude: 30,
+      latitude: 50.67544,
+      longitude: 4.2,
     },
   },
 ];
 
+const maxDistance = 10;
+
 router.get('/report/:lat/:long', (req, res) => {
-  res.send(reports);
+  const { lat, long } = req.params;
+  const currentPosition = {
+    latitude: lat,
+    longitude: long,
+  };
+
+  const reportsToSend = reports.filter((item) => {
+    const report = item;
+    const distance = Calcul.distanceBeetweenPoint(currentPosition, report.coordinate);
+    report.distance = distance;
+    return distance <= maxDistance;
+  });
+
+  res.send(reportsToSend);
 });
 
 router.post('/report', (req, res) => {
@@ -47,7 +55,8 @@ router.post('/report', (req, res) => {
     ...req.body,
   };
   reports.push(report);
-  res.send({ success: true });
+  const distance = Calcul.distanceBeetweenPoint(reports[0].coordinate, reports[1].coordinate);
+  res.send({ distance });
 });
 
 router.get('/report/:lat/:long', (req, res) => {

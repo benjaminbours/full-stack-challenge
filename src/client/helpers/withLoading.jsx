@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
+import { RequestController } from './RequestManager';
 
 export default function withLoading(WrappedComponent) {
   return class extends Component {
     state = {
       loading: false,
       success: false,
+    }
+
+    componentWillUnmount() {
+      if (this.state.loading) RequestController.abort();
     }
 
     startLoading = () => {

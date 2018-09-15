@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Typography from '@material-ui/core/Typography';
 import Report from '../comps/Report';
 import RequestManager from '../helpers/RequestManager';
 import PositionManager from '../helpers/PositionManager';
@@ -44,17 +45,34 @@ class ReportList extends Component {
     startLoading();
     const coordinate = await PositionManager.loadPosition();
     const items = await RequestManager.getReportList(coordinate);
+    console.log(items);
+    this.initialItems = items;
     this.setState({ items });
     stopLoading();
   }
 
   handleByTime = () => {
-
+    const { items } = this.state;
+    const newItems = items.sort((a, b) => {
+      const aSplit = a.time.split(':');
+      const bSplit = b.time.split(':');
+      return (parseFloat(aSplit[0] * 10) - parseFloat(bSplit[0] * 10)
+        + (parseFloat(aSplit[1]) - parseFloat(bSplit[1])));
+    });
+    this.setState({
+      items: newItems,
+    });
   }
 
   handleByDistance = () => {
-
+    const { items } = this.state;
+    const newItems = items.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
+    this.setState({
+      items: newItems,
+    });
   }
+
+  initialItems;
 
   render() {
     const { classes, loading } = this.props;
@@ -86,8 +104,11 @@ class ReportList extends Component {
           {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           <List>
             {items.map(item => (
-              <Report key={item.id} {...item} />
+              <Report key={item.title} {...item} />
             ))}
+            {!loading && items.length === 0 && (
+              <Typography>Sorry, no report around 10km</Typography>
+            )}
           </List>
         </Grid>
       </div>

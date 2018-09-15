@@ -20,7 +20,7 @@ const Report = ({
 }) => (
   <ListItem className={classes.root}>
     <Typography>{`Title: ${title}`}</Typography>
-    <Typography>{`Distance: ${distance}`}</Typography>
+    <Typography>{`Distance: ${distance} km`}</Typography>
     <Typography>{`time: ${time}`}</Typography>
   </ListItem>
 );

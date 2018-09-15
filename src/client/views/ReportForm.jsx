@@ -86,6 +86,7 @@ class ReportForm extends Component {
     report.coordinate = coordinate;
 
     const content = await RequestManager.postNewReport(report);
+    console.log(content);
     stopLoading(content.isJoi);
 
     if (content.isJoi) {
