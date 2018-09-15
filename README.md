@@ -16,8 +16,8 @@ const rootUrl = 'mongodb://localhost:27017';
 ## Launch
 ### App
 
-`npm run build & npm run start`
+`npm run build && npm run start`
 
 ### Doc
 
-`npm run esdoc & npm run esdoc:open`
+`npm run esdoc && npm run esdoc:open`

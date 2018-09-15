@@ -76,6 +76,7 @@ class ReportForm extends Component {
   };
 
   /**
+   * Deep copy of defaultFields to avoid reference
    * @type {object}
    * @property {{ value: string, error: boolean, message: string}} [slug] Object of field object.
    */
