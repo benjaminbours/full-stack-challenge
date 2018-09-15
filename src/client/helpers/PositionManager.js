@@ -1,3 +1,6 @@
+/**
+ * Tools class to get the gps coordinate.
+ */
 export default class PositionManager {
   static async loadPosition() {
     try {

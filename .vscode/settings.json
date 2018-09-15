@@ -1,3 +1,6 @@
 {
     "editor.tabSize": 2,
+    "tslint.enable": false,
+    "tslint.jsEnable": false,
+    "javascript.validate.enable": false
 }

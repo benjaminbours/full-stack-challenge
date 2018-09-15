@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { RequestController } from './RequestManager';
 
+/**
+ * HOC to encapsule the loading logic.
+ */
 export default function withLoading(WrappedComponent) {
   return class extends Component {
     state = {

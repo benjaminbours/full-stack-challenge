@@ -13,6 +13,9 @@ import RequestManager from '../helpers/RequestManager';
 import withLoading from '../helpers/withLoading';
 import PositionManager from '../helpers/PositionManager';
 
+/**
+ * JSS style
+ */
 const styles = () => ({
   input: {
     width: '100%',
@@ -53,12 +56,17 @@ const defaultFields = {
 };
 
 /**
- * This is MyClass.
- * @reactProps {!number} prop1 - this is prop1
- * @reactProps {string} prop2 - this is prop2
+ * View that display a report list
+ * @reactProps {object} classes - The JSS classes.
+ * @reactProps {boolean} loading - Is this component is loading ?.
+ * @reactProps {boolean} success - Is this component has loaded with success ?.
+ * @reactProps {function} startLoading - Function trigger when the list is fetch.
+ * @reactProps {function} stopLoading - Function trigger when the list has fetched.
  */
-
 class ReportForm extends Component {
+  /**
+   * propTypes
+   */
   static propTypes = {
     classes: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -67,8 +75,17 @@ class ReportForm extends Component {
     stopLoading: PropTypes.func.isRequired,
   };
 
+  /**
+   * @type {object}
+   * @property {{ value: string, error: boolean, message: string}} [slug] Object of field object.
+   */
   state = JSON.parse(JSON.stringify(defaultFields));
 
+  /**
+   * Handle the submit of the form, manage the error if there are some,
+   * or display indication of successfull request. Responsabilities
+   * of this function can be segmented.
+   */
   handleSubmitForm = async () => {
     let fields = this.state;
     const {
@@ -92,7 +109,6 @@ class ReportForm extends Component {
     report.coordinate = coordinate;
 
     const content = await RequestManager.postNewReport(report);
-    console.log(content);
     stopLoading(content.isJoi);
 
     if (content.isJoi) {
@@ -110,6 +126,11 @@ class ReportForm extends Component {
     this.setState({ ...fields });
   }
 
+  /**
+   * Update the fields value
+   * @param {string} name The slug of the field
+   * @param {SytheticEvent} e
+   */
   handleChangeForm = name => (e) => {
     this.setState({
       [name]: {
@@ -119,6 +140,10 @@ class ReportForm extends Component {
     });
   }
 
+  /**
+   * render
+   * @return {ReactElement} markup
+   */
   render() {
     const {
       classes,
@@ -186,5 +211,6 @@ class ReportForm extends Component {
   }
 }
 
-const ReportFormStyled = withStyles(styles)(ReportForm);
-export default withLoading(ReportFormStyled);
+export default withLoading(
+  withStyles(styles)(ReportForm),
+);

@@ -5,18 +5,9 @@ const Calcul = require('../helpers/Calcul');
 
 const router = express.Router();
 
-const reports = [
-  {
-    title: 'fake',
-    time: '02:30',
-    coordinate: {
-      latitude: 50.67544,
-      longitude: 4.2,
-    },
-  },
-];
-
 const maxDistance = 10;
+
+const rootUrl = 'mongodb://localhost:27017';
 
 router.get('/report/:lat/:long', (req, res) => {
   const { lat, long } = req.params;
@@ -24,8 +15,7 @@ router.get('/report/:lat/:long', (req, res) => {
     latitude: lat,
     longitude: long,
   };
-  const url = 'mongodb://localhost:27017/';
-  MongoClient.connect(url, (err, db) => {
+  MongoClient.connect(rootUrl, (err, db) => {
     const dbo = db.db('cpark');
     dbo.collection('reports').find({}).toArray((error, result) => {
       console.log(result);
@@ -64,11 +54,9 @@ router.post('/report', (req, res) => {
   };
   report.time = new Date(report.time);
 
-  const url = 'mongodb://localhost:27017/cpark';
-  MongoClient.connect(url, (err, db) => {
+  MongoClient.connect(rootUrl, (err, db) => {
     const dbo = db.db('cpark');
-    dbo.collection('reports').insertOne(report, (err, res) => {
-      console.log('1 report inserted');
+    dbo.collection('reports').insertOne(report, () => {
       db.close();
     });
     res.send({ success: true });

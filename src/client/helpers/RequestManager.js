@@ -2,9 +2,15 @@ import { fetch } from 'whatwg-fetch';
 
 const { origin } = window.location;
 
+/**
+ * Abort controller is here to cancel request between page transition.
+ */
 export const RequestController = new AbortController();
 const { signal } = RequestController;
 
+/**
+ * Tools class to handle the different api request.
+ */
 export default class RequestManager {
   static async getReportList(coordinate) {
     const response = await fetch(`${origin}/report/${coordinate.latitude}/${coordinate.longitude}`, { signal });

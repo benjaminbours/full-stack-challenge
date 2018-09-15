@@ -11,6 +11,9 @@ import RequestManager from '../helpers/RequestManager';
 import PositionManager from '../helpers/PositionManager';
 import withLoading from '../helpers/withLoading';
 
+/**
+ * JSS style
+ */
 const styles = () => ({
   buttonProgress: {
     position: 'fixed',
@@ -22,12 +25,17 @@ const styles = () => ({
 });
 
 /**
- * This is Foo.
+ * View that display a report list
+ * @reactProps {object} classes - The JSS classes.
+ * @reactProps {boolean} loading - Is this component is loading ?.
+ * @reactProps {boolean} success - Is this component has loaded with success ?.
+ * @reactProps {function} startLoading - Function trigger when the list is fetch.
+ * @reactProps {function} stopLoading - Function trigger when the list has fetched.
  */
 class ReportList extends Component {
   /**
- * @param {number} p - this is p.
- */
+   * propTypes
+   */
   static propTypes = {
     classes: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
@@ -36,27 +44,39 @@ class ReportList extends Component {
     stopLoading: PropTypes.func.isRequired,
   };
 
+  /**
+   * @type {object}
+   * @property {array} items An array of report to display.
+   */
   state = {
     items: [],
   }
 
+  /**
+   * Constructor trigger getReports
+   * @param {object} props
+   */
   constructor(props) {
     super(props);
     this.getReports();
   }
 
-
+  /**
+   * Fetch reports from server api.
+   */
   getReports = async () => {
     const { startLoading, stopLoading } = this.props;
     startLoading();
     const coordinate = await PositionManager.loadPosition();
     const items = await RequestManager.getReportList(coordinate);
     console.log(items);
-    this.initialItems = items;
     this.setState({ items });
     stopLoading();
   }
 
+  /**
+   * Sort reports by time
+   */
   handleSortByTime = () => {
     const { items } = this.state;
     const newItems = items.sort((a, b) => {
@@ -69,6 +89,9 @@ class ReportList extends Component {
     });
   }
 
+  /**
+   * Sort reports by distance
+   */
   handleSortByDistance = () => {
     const { items } = this.state;
     const newItems = items.sort((a, b) => parseFloat(a.distance) - parseFloat(b.distance));
@@ -77,8 +100,10 @@ class ReportList extends Component {
     });
   }
 
-  initialItems;
-
+  /**
+   * render
+   * @return {ReactElement} markup
+   */
   render() {
     const { classes, loading } = this.props;
     const { items } = this.state;
@@ -121,5 +146,6 @@ class ReportList extends Component {
   }
 }
 
-const ReportListStyled = withStyles(styles)(ReportList);
-export default withLoading(ReportListStyled);
+export default withLoading(
+  withStyles(styles)(ReportList),
+);

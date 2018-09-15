@@ -5,10 +5,11 @@
   "scripts": {
     "esdoc": "./node_modules/.bin/esdoc",
     "esdoc:open": "open ./docs/index.html",
-    "build": "webpack --mode production",
     "watch-client": "webpack --watch --mode development",
-    "start-server": "nodemon --inspect app.js",
-    "start": "npm run start-server & npm run watch-client"
+    "watch-server": "nodemon --inspect app.js",
+    "dev": "npm run watch-server & npm run watch-client",
+    "build": "webpack --mode production",
+    "start": "nodemon app.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
@@ -37,6 +38,7 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-syntax-decorators": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^9.0.0",

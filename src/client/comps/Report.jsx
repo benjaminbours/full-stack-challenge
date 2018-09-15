@@ -4,6 +4,9 @@ import ListItem from '@material-ui/core/ListItem';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 
+/**
+ * JSS style
+ */
 const styles = () => ({
   root: {
     boxShadow: '0px 1px 2px 1px grey',
@@ -12,6 +15,13 @@ const styles = () => ({
   },
 });
 
+/**
+ * Controlled component, display the report's data.
+ * @reactProps {object} classes - The JSS classes.
+ * @reactProps {string} title - The title.
+ * @reactProps {string} time - The date time string.
+ * @reactProps {number} distance - the distance beetween the user and the report in km.
+ */
 const Report = ({
   title,
   time,

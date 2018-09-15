@@ -5,6 +5,9 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { withStyles } from '@material-ui/core/styles';
 
+/**
+ * JSS style
+ */
 const styles = () => ({
   viewContainer: {
     width: '90%',
@@ -12,7 +15,17 @@ const styles = () => ({
   },
 });
 
+/**
+ * Handle the responsability to manage the views and the links between them.
+ * @reactProps {string} defaultView - A key to display one of the views params.
+ * @reactProps {function} onSelected - A callback function trigger when the view change.
+ * @reactProps {object} views - The list of views. Each view should have a name and a Component.
+ * @reactProps {object} classes - The JSS classes.
+ */
 class Multiviews extends Component {
+  /**
+   * propTypes
+   */
   static propTypes = {
     defaultView: PropTypes.string.isRequired,
     onSelected: PropTypes.func.isRequired,
@@ -23,10 +36,18 @@ class Multiviews extends Component {
     classes: PropTypes.object.isRequired,
   };
 
+  /**
+   * @type {object}
+   * @property {string} currentView The slug of the current view.
+   */
   state = {
     currentView: this.props.defaultView,
   }
 
+  /**
+   * Update the current view
+   * @param {string} slug The key of the view clicked
+   */
   handleChangeView = (slug) => {
     const { onSelected } = this.props;
 
@@ -37,6 +58,10 @@ class Multiviews extends Component {
     });
   }
 
+  /**
+   * render
+   * @return {ReactElement} markup
+   */
   render() {
     const { views, classes } = this.props;
     const { currentView } = this.state;
@@ -61,7 +86,7 @@ class Multiviews extends Component {
     const View = views[currentView].view;
 
     return (
-      <>
+      <div>
         <AppBar position="static">
           <Tabs value={index}>
             {links}
@@ -70,7 +95,7 @@ class Multiviews extends Component {
         <div className={classes.viewContainer}>
           <View />
         </div>
-      </>
+      </div>
     );
   }
 }
