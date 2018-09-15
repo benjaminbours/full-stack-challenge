@@ -1,7 +1,7 @@
-import Report from './Report';
+import ReportForm from './ReportForm';
 import ReportList from './ReportList';
 
 export {
-  Report,
+  ReportForm,
   ReportList,
 };

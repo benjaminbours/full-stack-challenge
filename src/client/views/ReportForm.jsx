@@ -1,7 +1,5 @@
-import { fetch } from 'whatwg-fetch';
 import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
@@ -11,6 +9,9 @@ import SendIcon from '@material-ui/icons/Send';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import green from '@material-ui/core/colors/green';
+import RequestManager from '../helpers/RequestManager';
+import withLoading from '../helpers/withLoading';
+import PositionManager from '../helpers/PositionManager';
 
 const styles = () => ({
   input: {
@@ -54,97 +55,71 @@ const defaultFields = {
 class ReportForm extends Component {
   static propTypes = {
     classes: PropTypes.object.isRequired,
+    loading: PropTypes.bool.isRequired,
+    success: PropTypes.bool.isRequired,
+    startLoading: PropTypes.func.isRequired,
+    stopLoading: PropTypes.func.isRequired,
   };
 
-  state = {
-    loading: false,
-    noGps: false,
-    success: false,
-    fields: JSON.parse(JSON.stringify(defaultFields)),
-  }
+  state = JSON.parse(JSON.stringify(defaultFields));
 
   handleSubmitForm = async () => {
-    if ('geolocation' in navigator) {
-      let { loading, fields, success } = this.state;
+    let fields = this.state;
+    const {
+      startLoading,
+      stopLoading,
+      loading,
+    } = this.props;
 
-      if (loading) {
-        return;
-      }
+    if (loading) {
+      return;
+    }
+    startLoading();
+    const coordinate = await PositionManager.loadPosition();
 
-      this.setState({
-        loading: true,
-      });
+    const keys = Object.keys(fields);
+    const report = keys.reduce((object, item) => {
+      const reportObject = object;
+      reportObject[item] = fields[item].value;
+      return reportObject;
+    }, {});
+    report.coordinate = coordinate;
 
-      const coordinate = await this.loadPosition();
+    const content = await RequestManager.postNewReport(report);
+    stopLoading(content.isJoi);
 
-      const keys = Object.keys(fields);
-      const report = keys.reduce((object, item) => {
-        const reportObject = object;
-        reportObject[item] = fields[item].value;
-        return reportObject;
-      }, {});
-      report.coordinate = coordinate;
-
-      const response = await fetch(`${window.location.origin}/report`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(report),
-      });
-      const content = await response.json();
-
-      if (content.isJoi) {
-        for (let i = 0; i < content.details.length; i += 1) {
-          const { message, context } = content.details[i];
-          if (fields[context.key]) {
-            fields[context.key].error = true;
-            fields[context.key].message = message;
-          }
+    if (content.isJoi) {
+      for (let i = 0; i < content.details.length; i += 1) {
+        const { message, context } = content.details[i];
+        if (fields[context.key]) {
+          fields[context.key].error = true;
+          fields[context.key].message = message;
         }
-        loading = false;
-      } else {
-        loading = false;
-        success = true;
-        fields = JSON.parse(JSON.stringify(defaultFields));
       }
-
-      this.setState({ fields, loading, success });
     } else {
-      this.setState({
-        noGps: true,
-      });
+      fields = JSON.parse(JSON.stringify(defaultFields));
     }
-  }
 
-  loadPosition = async () => {
-    try {
-      const position = await this.getCurrentPosition();
-      const { latitude, longitude } = position.coords;
-      return { latitude, longitude };
-    } catch (error) {
-      return error;
-    }
+    this.setState({ ...fields });
   }
-
-  getCurrentPosition = (options = {}) => new Promise((resolve, reject) => {
-    navigator.geolocation.getCurrentPosition(resolve, reject, options);
-  })
 
   handleChangeForm = name => (e) => {
-    const { fields } = this.state;
-    fields[name] = {
-      value: e.target.value,
-      error: false,
-    };
-    this.setState({ fields });
+    this.setState({
+      [name]: {
+        value: e.target.value,
+        error: false,
+      },
+    });
   }
 
   render() {
-    const { classes } = this.props;
-    const { loading, noGps, success } = this.state;
-    const { title, time } = this.state.fields;
+    const {
+      classes,
+      loading,
+      success,
+    } = this.props;
+
+    const { title, time } = this.state;
 
     const buttonClass = classNames({
       [classes.buttonSuccess]: success,
@@ -199,16 +174,10 @@ class ReportForm extends Component {
             {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
         </Grid>
-        {noGps && (
-          <Grid item xs={12}>
-            <Typography>
-              {"Sorry, this device can't get GPS coordinate."}
-            </Typography>
-          </Grid>
-        )}
       </Grid>
     );
   }
 }
 
-export default withStyles(styles)(ReportForm);
+const ReportFormStyled = withStyles(styles)(ReportForm);
+export default withLoading(ReportFormStyled);

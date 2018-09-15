@@ -1,5 +1,6 @@
 const express = require('express');
 const Joi = require('joi');
+const mongo = require('mongodb');
 
 const router = express.Router();
 
@@ -12,7 +13,19 @@ const reports = [
       longitude: 30,
     },
   },
+  {
+    title: 'fake2',
+    time: '2h30',
+    coordinate: {
+      latitude: 30,
+      longitude: 30,
+    },
+  },
 ];
+
+router.get('/report/:lat/:long', (req, res) => {
+  res.send(reports);
+});
 
 router.post('/report', (req, res) => {
   const schema = {
@@ -34,7 +47,7 @@ router.post('/report', (req, res) => {
     ...req.body,
   };
   reports.push(report);
-  res.send(reports);
+  res.send({ success: true });
 });
 
 router.get('/report/:lat/:long', (req, res) => {
