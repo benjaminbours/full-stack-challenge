@@ -1,4 +1,6 @@
-# CPARK - Full stack challenge
+# Test - Full stack challenge
+
+The backend part can realy be improve and optimized
 
 ## Install
 
